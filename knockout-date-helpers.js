@@ -1,19 +1,31 @@
 define(["knockout", "moment"], function(ko, moment){
+    function isValidDate(d) {
+        if ( Object.prototype.toString.call(d) !== "[object Date]" ) {
+            return false;
+        }
+        return !isNaN(d.getTime());
+    }
+
     ko.bindingHandlers.date = {
-        update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        update: function (element, valueAccessor, allBindingsAccessor) {
             var value = valueAccessor();
             var valueUnwrapped = ko.utils.unwrapObservable(value);
             var allBindings = allBindingsAccessor();
-            // Date formats: http://momentjs.com/docs/#/displaying/format/
+
             var pattern = allBindings.format || 'YYYY-MM-DD HH:mm:SS';
+
             var output = "";
-            if (valueUnwrapped !== null && valueUnwrapped !== undefined) {
-                output = moment(new Date(valueUnwrapped)).format(pattern);
+            if (valueUnwrapped !== null && valueUnwrapped !== undefined && valueUnwrapped !== "") {
+                var _date = new Date(valueUnwrapped);
+                if (isValidDate(_date)) {
+                    output = moment(_date).format(pattern);
+                }
             }
-            if ($(element).is("input") === true) {
-                $(element).val(output);
+
+            if (ko.isObservable(value)) {
+                value(output);
             } else {
-                $(element).text(output);
+                element.value = output;
             }
         }
     };

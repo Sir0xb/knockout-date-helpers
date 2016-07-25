@@ -12,7 +12,7 @@ define(["knockout", "moment"], function(ko, moment){
             var valueUnwrapped = ko.utils.unwrapObservable(value);
             var allBindings = allBindingsAccessor();
 
-            var pattern = allBindings.format || 'YYYY-MM-DD HH:mm:SS';
+            var pattern = allBindings.format || 'YYYY-MM-DD HH:mm:ss';
 
             var output = "";
             if (valueUnwrapped !== null && valueUnwrapped !== undefined && valueUnwrapped !== "") {
